@@ -1,18 +1,21 @@
-import { sql } from "drizzle-orm";
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
+// We can use this table to store analysis history if needed
+export const analyses = pgTable("analyses", {
+  id: serial("id").primaryKey(),
+  imageUrl: text("image_url"),
+  diseaseName: text("disease_name").notNull(),
+  description: text("description").notNull(),
+  causes: text("causes").notNull(),
+  organicTreatment: text("organic_treatment").notNull(),
+  chemicalTreatment: text("chemical_treatment").notNull(),
+  language: varchar("language", { length: 2 }).notNull().default('en'),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
-});
+export const insertAnalysisSchema = createInsertSchema(analyses).omit({ id: true, createdAt: true });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export type Analysis = typeof analyses.$inferSelect;
+export type InsertAnalysis = z.infer<typeof insertAnalysisSchema>;
