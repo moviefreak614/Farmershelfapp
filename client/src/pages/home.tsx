@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sprout, Loader2 } from "lucide-react";
+import { Sprout, Loader2, FlaskConical, Leaf } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAnalyzeCrop } from "@/hooks/use-analysis";
 import { LanguageToggle } from "@/components/language-toggle";
